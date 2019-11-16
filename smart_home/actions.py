@@ -4,6 +4,10 @@ ACTION_EXECUTE = "action.devices.EXECUTE"
 ACTION_DISCONNECT = "action.devices.DISCONNECT"
 
 
+def get_action(action_str):
+    return 
+
+
 DEVICE_TYPE_OUTLET = "action.devices.types.OUTLET"
 DEVICE_TYPE_LIGHT = "action.devices.types.LIGHT"
 

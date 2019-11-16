@@ -36,9 +36,9 @@ class Device(object):
             "id": self.id,
             "type": self.type,
             "traits": self.traits,
-            "name": self.name,
+            "name": self.name._asdict(),
             "willReportState": self.will_report_state,
-            "deviceInfo": self.device_info,
+            "deviceInfo": self.device_info._asdict(),
             "roomHint": self.room_hint,
         }
         if self.attributes:

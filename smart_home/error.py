@@ -28,3 +28,13 @@ def format_error(request_id, error_code):
         error_code = ERROR_UNKNOWN_ERROR
 
     return {"requestId": request_id, "payload": {"errorCode": error_code}}
+
+
+class RequestError(Exception):
+    def __init__(self, request_id, error_code):
+        self.request_id = request_id
+        self.error_code = error_code
+
+    def get_json(self):
+        return format_error(self.request_id, self.error_code)
+
