@@ -32,7 +32,7 @@ class RequestHandler(object):
         for intent, input_ in inputs:
             handler_fn = self.handlers.get(intent)
             if handler_fn:
-                handler_fn(input_)
+                return handler_fn(input_)
 
     def format_sync_response(self):
         return {
