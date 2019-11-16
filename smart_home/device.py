@@ -1,10 +1,10 @@
 from collections import namedtuple
 
 
-Name = namedtuple("Name", ["name", "nick_names", "default_names"])
+Name = namedtuple("Name", ["name", "nicknames", "defaultNames"])
 
 DeviceInfo = namedtuple(
-    "DeviceInfo", ["manufacturer", "modell", "hwVersion", "swVersion"]
+    "DeviceInfo", ["manufacturer", "model", "hwVersion", "swVersion"]
 )
 
 
