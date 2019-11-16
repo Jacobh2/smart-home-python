@@ -3,9 +3,12 @@ from smart_home import actions
 from smart_home.device import Device
 from smart_home.error import RequestError
 
+import logging
+
 
 class RequestHandler(object):
     def __init__(self, agent_user_id, devices):
+        self.logger = logging.getLogger("RequestHandler")
         self.handlers = {
             actions.ACTION_SYNC: self.handle_sync_request,
             actions.ACTION_QUERY: self.handle_query_request,
@@ -15,6 +18,7 @@ class RequestHandler(object):
         self.agent_user_id = agent_user_id
         self.devices = dict()
         for device in devices:
+            self.logger.debug("Adding device with id %s", device.id)
             self.devices[device.id] = device
         self.current_request_id = None
 
@@ -44,7 +48,7 @@ class RequestHandler(object):
             "requestId": self.current_request_id,
             "payload": {
                 "agentUserId": self.agent_user_id,
-                "devices": list(map(Device.to_json, self.devices)),
+                "devices": list(map(Device.to_json, self.devices.values())),
             },
         }
 

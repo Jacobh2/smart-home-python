@@ -11,7 +11,7 @@ DeviceInfo = namedtuple(
 class Device(object):
     def __init__(
         self,
-        id,
+        id_,
         type_,
         traits,
         name,
@@ -22,7 +22,7 @@ class Device(object):
         custom_data=None,
         obj=None
     ):
-        self.id = id
+        self.id = id_
         self.type = type_
         self.traits = traits
         self.name = name
