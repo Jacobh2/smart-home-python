@@ -1,6 +1,15 @@
 from collections import namedtuple
 
 
+DEVICE_TYPE_OUTLET = "action.devices.types.OUTLET"
+DEVICE_TYPE_LIGHT = "action.devices.types.LIGHT"
+
+
+DEVICE_TRAITS_BRIGHTNESS = "action.devices.traits.Brightness"
+DEVICE_TRAITS_COLOR_SETTING = "action.devices.traits.ColorSetting"
+DEVICE_TRAITS_ON_OFF = "action.devices.traits.OnOff"
+
+
 Name = namedtuple("Name", ["name", "nicknames", "defaultNames"])
 
 DeviceInfo = namedtuple(
@@ -20,7 +29,7 @@ class Device(object):
         will_report_state=True,
         attributes=None,
         custom_data=None,
-        obj=None
+        obj=None,
     ):
         self.id = id_
         self.type = type_
@@ -48,3 +57,6 @@ class Device(object):
         if self.custom_data:
             ret["customData"] = self.custom_data
         return ret
+
+
+from device.rgb_light import RGBLight

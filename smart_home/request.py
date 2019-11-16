@@ -88,6 +88,40 @@ class RequestHandler(object):
     def handle_query_request(self, input_data):
         return self.format_query_response({})
 
+    def format_execute_response(self, commands):
+        """
+        {
+            "requestId": "ff36a3cc-ec34-11e6-b1a0-64510650abcf",
+            "payload": {
+                "commands": [
+                    {
+                        "ids": [
+                            "123"
+                        ],
+                        "status": "SUCCESS",
+                        "states": {
+                            "on": true,
+                            "online": true
+                        }
+                    },
+                    {
+                        "ids": [
+                            "456"
+                        ],
+                        "status": "ERROR",
+                        "errorCode": "deviceTurnedOff"
+                    }
+                ]
+            }
+        }
+        """
+        return {
+            "requestId": self.current_request_id,
+            "payload": {
+                "commands": commands
+            }
+        }
+
     def handle_execute_request(self, input_data):
         pass
 
