@@ -13,8 +13,13 @@ class RequestHandler(object):
             actions.ACTION_DISCONNECT: self.handle_disconnect_request,
         }
         self.agent_user_id = agent_user_id
-        self.devices = devices
+        self.devices = dict()
+        for device in devices:
+            self.devices[device.id] = device
         self.current_request_id = None
+
+    def get_device(self, device_id):
+        return self.devices.get(device_id)
 
     def parse_request(self, json_data):
         request_id = json_data.get("requestId")
@@ -46,8 +51,38 @@ class RequestHandler(object):
     def handle_sync_request(self, input_data):
         return self.format_sync_response()
 
+    def format_query_response(self, devices_status):
+        """
+        {
+            "requestId": "ff36a3cc-ec34-11e6-b1a0-64510650abcf",
+            "payload": {
+                "devices": {
+                    "123": {
+                        "on": true,
+                        "online": true
+                    },
+                    "456": {
+                        "on": true,
+                        "online": true,
+                        "brightness": 80,
+                        "color": {
+                        "name": "cerulean",
+                        "spectrumRGB": 31655
+                        }
+                    }
+                }
+            }
+        }
+        """
+        return {
+            "requestId": self.current_request_id,
+            "payload": {
+                "devices": devices_status
+            }
+        }
+
     def handle_query_request(self, input_data):
-        pass
+        return self.format_query_response({})
 
     def handle_execute_request(self, input_data):
         pass

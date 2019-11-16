@@ -20,6 +20,7 @@ class Device(object):
         will_report_state=True,
         attributes=None,
         custom_data=None,
+        obj=None
     ):
         self.id = id
         self.type = type_
@@ -30,6 +31,7 @@ class Device(object):
         self.will_report_state = will_report_state
         self.attributes = attributes
         self.custom_data = custom_data
+        self.obj = obj
 
     def to_json(self):
         ret = {
