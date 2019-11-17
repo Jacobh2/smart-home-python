@@ -1,12 +1,12 @@
-from smart_home.device import Device
-from smart_home.device import DeviceInfo
-from smart_home.device import Name
+from .device import Device
+from .device import DeviceInfo
+from .device import Name
 
-from smart_home.device import DEVICE_TYPE_LIGHT
+from .device import DEVICE_TYPE_LIGHT
 
-from smart_home.device import DEVICE_TRAITS_BRIGHTNESS
-from smart_home.device import DEVICE_TRAITS_COLOR_SETTING
-from smart_home.device import DEVICE_TRAITS_ON_OFF
+from .device import DEVICE_TRAITS_BRIGHTNESS
+from .device import DEVICE_TRAITS_COLOR_SETTING
+from .device import DEVICE_TRAITS_ON_OFF
 
 
 class RGBLight(Device):

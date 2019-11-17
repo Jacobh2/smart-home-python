@@ -1,7 +1,6 @@
-from smart_home import error
-from smart_home import actions
-from smart_home.device import Device
-from smart_home.error import RequestError
+from . import error
+from . import actions
+from . import Device
 
 import logging
 
@@ -28,11 +27,11 @@ class RequestHandler(object):
     def parse_request(self, json_data):
         request_id = json_data.get("requestId")
         if not request_id:
-            raise RequestError(None, error.ERROR_PROTOCOL_ERROR)
+            raise error.RequestError(None, error.ERROR_PROTOCOL_ERROR)
 
         inputs = json_data.get("inputs")
         if not inputs:
-            raise RequestError(request_id, error.ERROR_PROTOCOL_ERROR)
+            raise error.RequestError(request_id, error.ERROR_PROTOCOL_ERROR)
 
         return request_id, [(i["intent"], i) for i in inputs]
 
