@@ -59,4 +59,4 @@ class Device(object):
         return ret
 
 
-from device.rgb_light import RGBLight
+from smart_home.device.rgb_light import RGBLight
