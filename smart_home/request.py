@@ -1,12 +1,13 @@
 from . import error
 from . import actions
 from . import Device
+from . import auth
 
 import logging
 
 
 class RequestHandler(object):
-    def __init__(self, agent_user_id, devices):
+    def __init__(self, agent_user_id, devices, key_path="/usr/src/app/key.json"):
         self.logger = logging.getLogger("RequestHandler")
         self.handlers = {
             actions.ACTION_SYNC: self.handle_sync_request,
@@ -20,6 +21,12 @@ class RequestHandler(object):
             self.logger.debug("Adding device with id %s", device.id)
             self.devices[device.id] = device
         self.current_request_id = None
+
+        credentials = auth.create_credentials(key_path)
+        self.authorized_session = auth.create_authorized_session(credentials)
+        self.report_state_url = (
+            "https://homegraph.googleapis.com/v1/devices:reportStateAndNotification"
+        )
 
     def get_device(self, device_id):
         return self.devices.get(device_id)
@@ -79,9 +86,7 @@ class RequestHandler(object):
         """
         return {
             "requestId": self.current_request_id,
-            "payload": {
-                "devices": devices_status
-            }
+            "payload": {"devices": devices_status},
         }
 
     def handle_query_request(self, input_data):
@@ -114,15 +119,13 @@ class RequestHandler(object):
             }
         }
         """
-        return {
-            "requestId": self.current_request_id,
-            "payload": {
-                "commands": commands
-            }
-        }
+        return {"requestId": self.current_request_id, "payload": {"commands": commands}}
 
     def handle_execute_request(self, input_data):
         pass
 
     def handle_disconnect_request(self, input_data):
         pass
+
+    def report_state(self, state):
+        self.authorized_session.post(url=self.report_state_url, json=state)
