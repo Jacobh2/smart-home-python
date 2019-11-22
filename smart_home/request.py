@@ -100,28 +100,6 @@ class RequestHandler(object):
         return self.format_sync_response()
 
     def format_query_response(self, devices_status):
-        """
-        {
-            "requestId": "ff36a3cc-ec34-11e6-b1a0-64510650abcf",
-            "payload": {
-                "devices": {
-                    "123": {
-                        "on": true,
-                        "online": true
-                    },
-                    "456": {
-                        "on": true,
-                        "online": true,
-                        "brightness": 80,
-                        "color": {
-                        "name": "cerulean",
-                        "spectrumRGB": 31655
-                        }
-                    }
-                }
-            }
-        }
-        """
         return {
             "requestId": self.current_request_id,
             "payload": {"devices": devices_status},
