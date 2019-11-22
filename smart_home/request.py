@@ -4,10 +4,17 @@ from . import Device
 from . import auth
 
 import logging
+from os import path
 
 
 class RequestHandler(object):
-    def __init__(self, agent_user_id, devices, key_path="/usr/src/app/key.json"):
+    def __init__(
+        self,
+        agent_user_id,
+        devices,
+        key_path="/usr/src/app/key.json",
+        agent_user_is_store_path="/usr/src/app/agent.id",
+    ):
         self.logger = logging.getLogger("RequestHandler")
         self.handlers = {
             actions.ACTION_SYNC: self.handle_sync_request,
@@ -15,7 +22,8 @@ class RequestHandler(object):
             actions.ACTION_EXECUTE: self.handle_execute_request,
             actions.ACTION_DISCONNECT: self.handle_disconnect_request,
         }
-        self.agent_user_id = agent_user_id
+        self.agent_user_is_store_path = agent_user_is_store_path
+        self._agent_user_id = agent_user_id
         self.devices = dict()
         for device in devices:
             self.logger.debug("Adding device with id %s", device.id)
@@ -27,6 +35,19 @@ class RequestHandler(object):
         self.report_state_url = (
             "https://homegraph.googleapis.com/v1/devices:reportStateAndNotification"
         )
+
+    @property
+    def agent_user_id(self):
+        if self._agent_user_id is None and path.exists(self.agent_user_is_store_path):
+            with open(self.agent_user_is_store_path, "r") as f:
+                self._agent_user_id = f.read()
+        return self._agent_user_id
+
+    @agent_user_id.setter
+    def agent_user_id(self, value):
+        with open(self.agent_user_is_store_path, "w") as f:
+            f.write(value)
+        self._agent_user_id = value
 
     def get_device(self, device_id):
         return self.devices.get(device_id)
@@ -128,4 +149,8 @@ class RequestHandler(object):
         pass
 
     def report_state(self, state):
-        self.authorized_session.post(url=self.report_state_url, json=state)
+        response = self.authorized_session.post(url=self.report_state_url, json=state)
+        try:
+            self.logger.debug("Response %s: %s", response, response.json())
+        except:
+            pass
