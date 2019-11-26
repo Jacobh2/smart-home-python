@@ -159,8 +159,8 @@ class RequestHandler(object):
             pass
 
     def report_state_threaded(self):
-        try:
-            while True:
+        while True:
+            try:
                 # Gather state
                 state = self.format_device_state(self.devices.keys())
                 payload = {
@@ -174,5 +174,5 @@ class RequestHandler(object):
                 self.report_state(payload)
 
                 sleep(self.time_sleep_report_state)
-        except Exception:
-            self.logger.exception("Crash during report state")
+            except Exception:
+                self.logger.exception("Crash during report state")
