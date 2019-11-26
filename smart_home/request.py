@@ -144,7 +144,7 @@ class RequestHandler(object):
                         )
 
                     self.execute_handlers[exec_command](return_payload, device, params)
-                    
+
         return self.format_execute_response(return_payload)
 
     def handle_disconnect_request(self, input_data):
@@ -173,6 +173,6 @@ class RequestHandler(object):
                 # Report the sate
                 self.report_state(payload)
 
-                sleep(self.time_sleep_report_state)
             except Exception:
                 self.logger.exception("Crash during report state")
+            sleep(self.time_sleep_report_state)
