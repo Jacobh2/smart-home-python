@@ -27,6 +27,7 @@ class RequestHandler(object):
             actions.ACTION_DISCONNECT: self.handle_disconnect_request,
         }
         self.execute_handlers = execute_handlers
+        self.logger.debug("Have execute handlers %s", execute_handlers)
         self.agent_user_is_store_path = agent_user_is_store_path
         self._agent_user_id = agent_user_id
         self.devices = dict()
@@ -35,6 +36,7 @@ class RequestHandler(object):
             self.devices[device.id] = device
         self.current_request_id = None
 
+        self.logger.debug("Loading credentials from path %s", key_path)
         credentials = auth.create_credentials(key_path)
         self.authorized_session = auth.create_authorized_session(credentials)
         self.report_state_url = (
@@ -97,6 +99,7 @@ class RequestHandler(object):
         }
 
     def handle_sync_request(self, input_data):
+        self.logger.debug("Handling sync request with input data %s", input_data)
         return self.format_sync_response()
 
     def format_query_response(self, devices_status):
@@ -109,6 +112,7 @@ class RequestHandler(object):
         pass
 
     def handle_query_request(self, input_data):
+        self.logger.debug("Handling query request with input data %s", input_data)
         devices = input_data["payload"]["devices"]
         device_ids = [device["id"] for device in devices]
         device_status = self.format_device_state(device_ids)
@@ -118,6 +122,7 @@ class RequestHandler(object):
         return {"requestId": self.current_request_id, "payload": {"commands": commands}}
 
     def handle_execute_request(self, input_data):
+        self.logger.debug("Handling execute request with input data %s", input_data)
         return_payload = dict()
         for command in input_data["payload"]["commands"]:
             # Get the devices...
@@ -143,6 +148,7 @@ class RequestHandler(object):
         return self.format_execute_response(return_payload)
 
     def handle_disconnect_request(self, input_data):
+        self.logger.debug("Handling disconnect request with input data %s", input_data)
         pass
 
     def report_state(self, state):
